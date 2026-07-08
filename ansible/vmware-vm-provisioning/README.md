@@ -6,31 +6,31 @@ Enterprise automation project for provisioning and configuring VMware virtual ma
 
 - Cross-vCenter VM cloning
 - Automatic VM power-on
-- IP configuration
+- Network configuration
 - Hostname configuration
-- Oracle Linux deployment
 - Multi-VM provisioning
-- Infrastructure automation with Ansible
+- VMware infrastructure automation
 
 ## Technologies
 
 - Ansible
 - VMware vSphere
-- community.vmware Collection
-- Linux
+- community.vmware
+- Oracle Linux
 - SSH
+- VMware ESXi
 
-## Workflow
+## Architecture
 
 Template Clone
 ↓
 Power On
 ↓
-Network Configuration
+Configure Network
 ↓
-Hostname Configuration
+Configure Hostname
 ↓
-Production Ready
+Ready To Use VM
 
 ## Requirements
 
@@ -39,16 +39,7 @@ Production Ready
 - pyvmomi
 - sshpass
 
-## Installation
-
-```bash
-ansible-galaxy collection install community.vmware
-pip install pyvmomi
-apt install sshpass
-```
-
 ## Run
 
 ```bash
 ansible-playbook playbooks/main.yml
-```
