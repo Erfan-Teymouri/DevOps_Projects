@@ -1,1 +1,64 @@
+---
+- name: Clone a template across VC for {{ vm.name }}
+  community.vmware.vmware_guest_cross_vc_clone:
+    name: "{{ template_name }}"
+    hostname: "{{ vcenter_host }}"
+    username: "{{ vcenter_user }}"
+    password: "{{ vcenter_password }}"
+    destination_vm_name: "{{ vm.name }}"
+    destination_vcenter: "{{ vcenter_host }}"
+    destination_vcenter_username: "{{ vcenter_user }}"
+    destination_vcenter_password: "{{ vcenter_password }}"
+    validate_certs: false
+    destination_host: "{{ destination_host }}"
+    destination_datastore: "{{ destination_datastore }}"
+    destination_vm_folder: "{{ vm.folder | default(destination_vm_folder) }}"
+    state: present
+  register: cross_vc_clone_from_template
 
+- name: Power on VM {{ vm.name }}
+  community.vmware.vmware_guest:
+    hostname: "{{ vcenter_host }}"
+    username: "{{ vcenter_user }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    name: "{{ vm.name }}"
+    state: poweredon
+    networks:
+      - name: "{{ network_name }}"
+        device_type: "ens192"
+        ip: "{{ vm.ip }}"
+        netmask: "{{ netmask }}"
+        gateway: "{{ gateway }}"
+        dns_servers:
+          - "{{ dns_server }}"
+
+- name: Wait for VM {{ vm.name }} to be reachable via SSH
+  ansible.builtin.wait_for:
+    host: "{{ vm.old_ip }}"
+    port: 22
+    timeout: 300
+    state: started
+
+- name: Change IP address and hostname of {{ vm.name }}
+  ansible.builtin.shell: |
+    sshpass -p {{ ssh_password }} ssh -o StrictHostKeyChecking=no root@{{ vm.old_ip }} \
+    "hostnamectl set-hostname {{ vm.hostname }}; \
+    nmcli con mod ens192 ipv4.addresses {{ vm.ip }}/24; \
+    nmcli con mod ens192 ipv4.gateway {{ gateway }}; \
+    nmcli con mod ens192 ipv4.dns {{ dns_server }}; \
+    nmcli con up ens192; \
+    exit"
+  async: 120
+  poll: 0
+  register: change_ip_and_hostname
+  delegate_to: localhost
+
+- name: Debug change IP and hostname result for {{ vm.name }}
+  ansible.builtin.debug:
+    var: change_ip_and_hostname.results
+  when: change_ip_and_hostname is defined
+
+- name: Pause for network changes of {{ vm.name }}
+  ansible.builtin.pause:
+    minutes: 1
