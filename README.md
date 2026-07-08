@@ -1,2 +1,8 @@
-# DevOps_Projects
-A collection of DevOps projects, labs and automation solutions.
+# DevOps Projects
+
+This repository contains my DevOps projects, automation solutions and infrastructure engineering practices.
+
+## Available Projects
+
+- Ansible
+  - VMware VM Provisioning Automation
