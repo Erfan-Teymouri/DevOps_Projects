@@ -1,1 +1,6 @@
-
+vcenter_host:
+vcenter_user:
+vcenter_password:
+destination_host:
+destination_datastore:
+destination_vm_folder:
