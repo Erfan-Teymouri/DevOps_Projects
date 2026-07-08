@@ -6,7 +6,10 @@ destination_host: esxi.example.local
 destination_datastore: datastore1
 destination_vm_folder: /Production
 
+template_name: oracle-linux-template
 network_name: VM Network
+netmask: 255.255.255.0
 gateway: 192.168.1.1
 dns_server: 8.8.8.8
+
 ssh_password: changeme
