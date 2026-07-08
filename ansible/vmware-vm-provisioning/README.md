@@ -1,15 +1,16 @@
 # VMware VM Provisioning Automation using Ansible
 
-This project automates VMware virtual machine provisioning and post-deployment configuration.
+Enterprise automation project for provisioning and configuring VMware virtual machines.
 
 ## Features
 
 - Cross-vCenter VM cloning
 - Automatic VM power-on
-- Network configuration
+- IP configuration
 - Hostname configuration
+- Oracle Linux deployment
 - Multi-VM provisioning
-- VMware infrastructure automation
+- Infrastructure automation with Ansible
 
 ## Technologies
 
@@ -19,11 +20,35 @@ This project automates VMware virtual machine provisioning and post-deployment c
 - Linux
 - SSH
 
-## Project Structure
+## Workflow
 
-```text
-playbooks/
-vars/
-inventory/
-images/
+Template Clone
+↓
+Power On
+↓
+Network Configuration
+↓
+Hostname Configuration
+↓
+Production Ready
+
+## Requirements
+
+- Ansible
+- community.vmware
+- pyvmomi
+- sshpass
+
+## Installation
+
+```bash
+ansible-galaxy collection install community.vmware
+pip install pyvmomi
+apt install sshpass
+```
+
+## Run
+
+```bash
+ansible-playbook playbooks/main.yml
 ```
