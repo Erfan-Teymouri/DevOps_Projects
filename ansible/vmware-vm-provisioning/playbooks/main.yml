@@ -1,1 +1,16 @@
+---
+- name: Create and Configure VMs
+  hosts: localhost
+  connection: local
+  gather_facts: false
 
+  vars_files:
+    - ../vars/vcenter.yml
+    - ../vars/vm_definitions.yml
+
+  tasks:
+    - name: Include VM operations
+      include_tasks: vm_operations.yml
+      loop: "{{ vm_definitions }}"
+      loop_control:
+        loop_var: vm
