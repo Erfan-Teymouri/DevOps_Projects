@@ -1,6 +1,12 @@
-vcenter_host:
-vcenter_user:
-vcenter_password:
-destination_host:
-destination_datastore:
-destination_vm_folder:
+vcenter_host: vc.example.local
+vcenter_user: administrator@vsphere.local
+vcenter_password: changeme
+
+destination_host: esxi.example.local
+destination_datastore: datastore1
+destination_vm_folder: /Production
+
+network_name: VM Network
+gateway: 192.168.1.1
+dns_server: 8.8.8.8
+ssh_password: changeme
